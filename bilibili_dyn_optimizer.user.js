@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      1.0
 // @description  扩展主内容区域宽度并移除右侧边栏
-// @author       You
+// @author       https://github.com/LIN113/bilibili_dyn_Interface_optimization
 // @match        https://t.bilibili.com/?tab=video
 // @grant        none
 // @run-at       document-end
