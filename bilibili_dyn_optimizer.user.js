@@ -41,6 +41,21 @@
             display: none !important;
         }
 
+        /* 侧边栏位置调整 */
+        .bili-dyn-sidebar {
+            right: calc(0vw + 66px) !important;
+            right: auto !important;
+            transform: none !important;
+        }
+
+        @media screen and (min-width: 1452px) {
+            .bili-dyn-sidebar {
+                right: calc(0vw + 66px) !important;
+                left: auto !important;
+                transform: none !important;
+            }
+        }
+
         /* 动态列表容器 - 网格布局 */
         .bili-dyn-list__items {
             display: grid !important;
