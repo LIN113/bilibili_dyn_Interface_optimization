@@ -576,6 +576,15 @@
             border-radius: 20px 20px 0 0 !important;
         }
 
+        /* 已观看视频样式 */
+        .bili-dyn-list__item.watched .bili-dyn-card-video__cover {
+            opacity: 0.6 !important;
+        }
+
+        .bili-dyn-list__item.watched .bili-dyn-card-video__title {
+            color: #9499a0 !important;
+        }
+
         /* 响应式优化 */
         @media (max-width: 1600px) {
             .bili-dyn-list__items {
@@ -650,6 +659,47 @@
       publishing.remove();
       console.log("已移除发布动态区域");
     }
+  }
+
+  // 已观看视频追踪
+  const WATCHED_KEY = 'bili_watched_videos';
+
+  function getWatchedVideos() {
+    return JSON.parse(localStorage.getItem(WATCHED_KEY) || '[]');
+  }
+
+  function markAsWatched(videoId) {
+    const watched = getWatchedVideos();
+    if (!watched.includes(videoId)) {
+      watched.push(videoId);
+      localStorage.setItem(WATCHED_KEY, JSON.stringify(watched));
+    }
+  }
+
+  function applyWatchedStyles() {
+    const watched = getWatchedVideos();
+    document.querySelectorAll('.bili-dyn-list__item').forEach(item => {
+      const link = item.querySelector('a[href*="/video/"]');
+      if (link) {
+        const videoId = link.href.match(/\/video\/(BV[\w]+)/)?.[1];
+        if (videoId && watched.includes(videoId)) {
+          item.classList.add('watched');
+        }
+      }
+    });
+  }
+
+  function trackVideoClicks() {
+    document.addEventListener('click', (e) => {
+      const link = e.target.closest('a[href*="/video/"]');
+      if (link) {
+        const videoId = link.href.match(/\/video\/(BV[\w]+)/)?.[1];
+        if (videoId) {
+          markAsWatched(videoId);
+          link.closest('.bili-dyn-list__item')?.classList.add('watched');
+        }
+      }
+    }, true);
   }
 
   // 修复卡片布局
@@ -754,11 +804,21 @@
   removeRightAside();
   removeleftAside();
   removePublishing();
+  trackVideoClicks();
 
   // 延迟执行布局修复，确保页面加载完成
-  setTimeout(fixCardLayout, 500);
-  setTimeout(fixCardLayout, 1000);
-  setTimeout(fixCardLayout, 2000);
+  setTimeout(() => {
+    fixCardLayout();
+    applyWatchedStyles();
+  }, 500);
+  setTimeout(() => {
+    fixCardLayout();
+    applyWatchedStyles();
+  }, 1000);
+  setTimeout(() => {
+    fixCardLayout();
+    applyWatchedStyles();
+  }, 2000);
 
   // 使用MutationObserver监听DOM变化，防止动态加载的元素
   const observer = new MutationObserver(() => {
@@ -766,6 +826,7 @@
     removeleftAside();
     removePublishing();
     fixCardLayout();
+    applyWatchedStyles();
   });
 
   observer.observe(document.body, {
