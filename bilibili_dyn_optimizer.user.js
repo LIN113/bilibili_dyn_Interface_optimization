@@ -61,7 +61,7 @@
             display: grid !important;
             grid-template-columns: repeat(auto-fill, 310px) !important;
             grid-auto-rows: 269.38px !important;
-            gap: 16px !important;
+            gap: 24px !important;
             padding: 20px !important;
             justify-content: center !important;
             align-items: start !important;
@@ -93,6 +93,18 @@
             overflow: hidden !important;
         }
 
+        /* 第一个卡片占据 2x2 空间 */
+        .bili-dyn-list__item:first-child {
+            grid-column: span 2 !important;
+            grid-row: span 2 !important;
+            width: 644px !important;
+            max-width: 644px !important;
+            min-width: 644px !important;
+            height: 562.76px !important;
+            max-height: 562.76px !important;
+            min-height: 562.76px !important;
+        }
+
         /* B站首页卡片样式 */
         .bili-dyn-item {
             width: 310px !important;
@@ -106,13 +118,54 @@
             overflow: hidden !important;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08) !important;
-            border: 0.2px solid #ececec !important;
+            border: 0px solid #ececec !important;
             display: flex !important;
             flex-direction: column !important;
             cursor: pointer !important;
             padding: 0 !important;
             margin: 0 !important;
             position: relative !important;
+        }
+
+        /* 大卡片样式 */
+        .bili-dyn-list__item:first-child .bili-dyn-item,
+        .bili-dyn-list__item:first-child .bili-dyn-item__main,
+        .bili-dyn-list__item:first-child .bili-dyn-card-video {
+            width: 644px !important;
+            max-width: 644px !important;
+            min-width: 644px !important;
+            height: 562.76px !important;
+            max-height: 562.76px !important;
+            min-height: 562.76px !important;
+        }
+
+        .bili-dyn-list__item:first-child .bili-dyn-card-video__header {
+            width: 644px !important;
+            max-width: 644px !important;
+            height: 362.25px !important;
+            max-height: 362.25px !important;
+            min-height: 362.25px !important;
+        }
+
+        .bili-dyn-list__item:first-child .bili-dyn-card-video__body {
+            width: 644px !important;
+            max-width: 644px !important;
+            height: 200.51px !important;
+            max-height: 200.51px !important;
+            min-height: 200.51px !important;
+            padding: 20px 16px 12px 16px !important;
+        }
+
+        .bili-dyn-list__item:first-child .bili-dyn-card-video__title {
+            font-size: 20px !important;
+            line-height: 26px !important;
+            -webkit-line-clamp: 3 !important;
+            max-height: 78px !important;
+        }
+
+        .bili-dyn-list__item:first-child .bili-dyn-card-video__author {
+            font-size: 14px !important;
+            line-height: 20px !important;
         }
 
         .bili-dyn-item::before {
@@ -124,10 +177,17 @@
         }
 
         .bili-dyn-item:hover {
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12) !important;
-            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+            transform: translateY(-2px) scale(1.03) !important;
             border-color: #00aeec !important;
+            z-index: 10 !important;
         }
+
+        // /* 鼠标悬停时，模糊其他卡片并降低透明度 */
+        // .bili-dyn-list__items:has(.bili-dyn-item:hover) .bili-dyn-item:not(:hover) {
+        //     filter: blur(3px) !important;
+        //     opacity: 0.7 !important;
+        // }
 
         /* 卡片内部布局优化 */
         .bili-dyn-item__main {
@@ -272,7 +332,7 @@
             min-height: 95px !important;
             border: none !important;
             border-radius: 0 !important;
-            padding: 8px 10px !important;
+            padding: 12px 10px 8px 10px !important;
             position: relative !important;
             overflow: hidden !important;
             box-sizing: border-box !important;
@@ -285,7 +345,7 @@
         .bili-dyn-card-video__author {
             font-size: 12px !important;
             line-height: 16px !important;
-            color: #61666d !important;
+            color: #9499a0 !important;
             margin: 0 0 2px 0 !important;
             padding: 0 !important;
             display: flex !important;
@@ -327,7 +387,7 @@
             font-size: 16px !important;
             line-height: 18px !important;
             color: #18191c !important;
-            font-weight: 500 !important;
+            font-weight: 600 !important;
             padding: 0 !important;
             margin: 0 !important;
             display: -webkit-box !important;
@@ -595,14 +655,24 @@
   // 修复卡片布局
   function fixCardLayout() {
     const items = document.querySelectorAll(".bili-dyn-list__item");
-    items.forEach((item) => {
-      // 强制设置尺寸
-      item.style.setProperty("width", "310px", "important");
-      item.style.setProperty("max-width", "310px", "important");
-      item.style.setProperty("min-width", "310px", "important");
-      item.style.setProperty("height", "269.38px", "important");
-      item.style.setProperty("max-height", "269.38px", "important");
-      item.style.setProperty("min-height", "269.38px", "important");
+    items.forEach((item, index) => {
+      if (index === 0) {
+        // 第一个卡片使用大尺寸
+        item.style.setProperty("width", "644px", "important");
+        item.style.setProperty("max-width", "644px", "important");
+        item.style.setProperty("min-width", "644px", "important");
+        item.style.setProperty("height", "562.76px", "important");
+        item.style.setProperty("max-height", "562.76px", "important");
+        item.style.setProperty("min-height", "562.76px", "important");
+      } else {
+        // 其他卡片使用标准尺寸
+        item.style.setProperty("width", "310px", "important");
+        item.style.setProperty("max-width", "310px", "important");
+        item.style.setProperty("min-width", "310px", "important");
+        item.style.setProperty("height", "269.38px", "important");
+        item.style.setProperty("max-height", "269.38px", "important");
+        item.style.setProperty("min-height", "269.38px", "important");
+      }
       // 移除可能导致重叠的样式
       item.style.setProperty("position", "relative", "important");
       item.style.setProperty("transform", "none", "important");
